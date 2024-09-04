@@ -9,6 +9,8 @@ def interface():
     print("You selected {}".format(choice))
     if choice == "1":
         hdl_driver()
+    elif choice == "2":
+        ldl_driver()
 
 
 def hdl_driver():
@@ -40,6 +42,33 @@ def hdl_output(hdl_value, hdl_analysis):
                                               hdl_analysis))
     return                
   
+def ldl_driver():
+    ldl_value = ldl_input()   
+    ldl_result = ldl_analysis(ldl_value)
+    ldl_output(ldl_value, ldl_result)
+    
+    
+def ldl_input():
+    user_input = input("Enter the LDL value: ")
+    user_number = int(user_input)
+    return user_number
+    
+
+def ldl_analysis(ldl_value):
+    if ldl_value < 130:
+        return "Normal"
+    elif 130 <= ldl_value <= 159:
+        return "Borderline High"
+    elif 160 <= ldl_value <= 189:
+        return "High"
+    else:
+        return "Very High"
+        
+        
+def ldl_output(ldl_value, ldl_analysis):
+    print("The LDL value of {} is {}.".format(ldl_value, 
+                                              ldl_analysis))
+    return                
 
    
     
