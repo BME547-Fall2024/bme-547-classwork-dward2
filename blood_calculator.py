@@ -17,6 +17,7 @@ def hdl_driver():
     # Compare user input against normal values
     hdl_result = hdl_analysis(hdl_value)
     # Output the results
+    hdl_output(hdl_value, hdl_result)
     
     
 def hdl_input():
@@ -32,6 +33,13 @@ def hdl_analysis(hdl_value):
         return "Borderline Low"
     else:
         return "Low"
+        
+        
+def hdl_output(hdl_value, hdl_analysis):
+    print("The HDL value of {} is {}.".format(hdl_value, 
+                                              hdl_analysis))
+    return                
+  
 
    
     
