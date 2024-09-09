@@ -1,3 +1,7 @@
+print("This is the blood_calculator module")
+print("Python calls this {}".format(__name__))
+
+
 def interface():
     print("Blood Calculator")
     while True:
@@ -81,7 +85,7 @@ def total_cholesterol_analysis(total_value):
         return "High"
 
         
-            
-interface()
+if __name__ == "__main__":            
+    interface()
 
     
