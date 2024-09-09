@@ -12,6 +12,8 @@ def interface():
             hdl_driver()
         elif choice == "2":
             ldl_driver()
+        elif choice == "3":
+            total_cholesterol_driver()
         elif choice == "9":
             break
 
@@ -62,6 +64,22 @@ def ldl_analysis(ldl_value):
         return "High"
     else:
         return "Very High"
+        
+def total_cholesterol_driver():
+    test_name = "total cholesterol"
+    total_value = generic_input(test_name)
+    total_result = total_cholesterol_analysis(total_value)
+    generic_output(test_name, total_value, total_result)
+    
+
+def total_cholesterol_analysis(total_value):
+    if total_value < 200:
+        return "Normal"
+    elif 200 <= total_value < 240:
+        return "Borderline high"
+    else:
+        return "High"
+
         
             
 interface()
