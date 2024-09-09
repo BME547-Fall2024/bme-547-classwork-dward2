@@ -1,29 +1,33 @@
 def interface():
     print("Blood Calculator")
-    print("Select a test")
-    print("1 - HDL")
-    print("2 - LDL")
-    print("3 - Total")
-    print("9 - Quit")
-    choice = input("Select a test: ")
-    print("You selected {}".format(choice))
-    if choice == "1":
-        hdl_driver()
-    elif choice == "2":
-        ldl_driver()
+    while True:
+        print("Select a test")
+        print("1 - HDL")
+        print("2 - LDL")
+        print("3 - Total")
+        print("9 - Quit")
+        choice = input("Select a test: ")
+        print("You selected {}".format(choice))
+        if choice == "1":
+            hdl_driver()
+        elif choice == "2":
+            ldl_driver()
+        elif choice == "9":
+            break
 
 
 def hdl_driver():
     # Get the user input
-    hdl_value = hdl_input()   
+    test_name = "HDL"
+    hdl_value = generic_input(test_name)   
     # Compare user input against normal values
     hdl_result = hdl_analysis(hdl_value)
     # Output the results
-    hdl_output(hdl_value, hdl_result)
+    generic_output(test_name, hdl_value, hdl_result)
     
     
-def hdl_input():
-    user_input = input("Enter the HDL value: ")
+def generic_input(test_name):
+    user_input = input("Enter the {} value: ".format(test_name))
     user_number = int(user_input)
     return user_number
     
@@ -37,23 +41,18 @@ def hdl_analysis(hdl_value):
         return "Low"
         
         
-def hdl_output(hdl_value, hdl_analysis):
-    print("The HDL value of {} is {}.".format(hdl_value, 
-                                              hdl_analysis))
+def generic_output(test_name, value, analysis):
+    print("The {} value of {} is {}.".format(test_name, value, 
+                                              analysis))
     return                
   
 def ldl_driver():
-    ldl_value = ldl_input()   
+    test_name = "LDL"
+    ldl_value = generic_input(test_name)   
     ldl_result = ldl_analysis(ldl_value)
-    ldl_output(ldl_value, ldl_result)
+    generic_output(test_name, ldl_value, ldl_result)
     
     
-def ldl_input():
-    user_input = input("Enter the LDL value: ")
-    user_number = int(user_input)
-    return user_number
-    
-
 def ldl_analysis(ldl_value):
     if ldl_value < 130:
         return "Normal"
@@ -64,16 +63,7 @@ def ldl_analysis(ldl_value):
     else:
         return "Very High"
         
-        
-def ldl_output(ldl_value, ldl_analysis):
-    print("The LDL value of {} is {}.".format(ldl_value, 
-                                              ldl_analysis))
-    return                
-
-   
-    
-    
-    
+            
 interface()
 
     
