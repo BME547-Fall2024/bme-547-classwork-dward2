@@ -25,18 +25,18 @@ def interface():
 def hdl_driver():
     # Get the user input
     test_name = "HDL"
-    hdl_value = generic_input(test_name)   
+    hdl_value = generic_input(test_name)
     # Compare user input against normal values
     hdl_result = hdl_analysis(hdl_value)
     # Output the results
     generic_output(test_name, hdl_value, hdl_result)
-    
-    
+
+
 def generic_input(test_name):
     user_input = input("Enter the {} value: ".format(test_name))
     user_number = int(user_input)
     return user_number
-    
+
 
 def hdl_analysis(hdl_value):
     if hdl_value >= 60:
@@ -45,20 +45,21 @@ def hdl_analysis(hdl_value):
         return "Borderline Low"
     else:
         return "Low"
-        
-        
+
+
 def generic_output(test_name, value, analysis):
-    print("The {} value of {} is {}.".format(test_name, value, 
-                                              analysis))
-    return                
-  
+    print("The {} value of {} is {}.".format(test_name, value,
+                                             analysis))
+    return
+
+
 def ldl_driver():
     test_name = "LDL"
-    ldl_value = generic_input(test_name)   
+    ldl_value = generic_input(test_name)
     ldl_result = ldl_analysis(ldl_value)
     generic_output(test_name, ldl_value, ldl_result)
-    
-    
+
+
 def ldl_analysis(ldl_value):
     if ldl_value < 130:
         return "Normal"
@@ -68,13 +69,14 @@ def ldl_analysis(ldl_value):
         return "High"
     else:
         return "Very High"
-        
+
+
 def total_cholesterol_driver():
     test_name = "total cholesterol"
     total_value = generic_input(test_name)
     total_result = total_cholesterol_analysis(total_value)
     generic_output(test_name, total_value, total_result)
-    
+
 
 def total_cholesterol_analysis(total_value):
     if total_value < 200:
@@ -84,8 +86,6 @@ def total_cholesterol_analysis(total_value):
     else:
         return "High"
 
-        
-if __name__ == "__main__":            
-    interface()
 
-    
+if __name__ == "__main__":
+    interface()
