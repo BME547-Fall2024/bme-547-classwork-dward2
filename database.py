@@ -1,7 +1,6 @@
 """
    patient = {"id": <id_num_as_int>,
-              "test_name": <str>,
-              "test_value": <int or float>}
+              "tests": [(test_name, test_value), (test_name1, test_value1), ...]}
 
 Patient id: 1553
    Test Type:  HDL
@@ -15,28 +14,50 @@ etc.
 """
 
 
-def make_new_patient(line):
-    mrn, test_name, test_value = line.split(",")
-    new_patient_dictionary = {"id": int(mrn),
-                              "test_name": test_name,
-                              "test_value": float(test_value)}
+def make_new_patient(mrn, test_name, test_value):
+    test_data = (test_name, test_value)
+    new_patient_dictionary = {"id": mrn,
+                              "tests": [test_data]}
     return new_patient_dictionary
+    
+    
+def get_patient_from_db(db, mrn):
+    # Search the database.
+    for patient in db:
+    # If the patient exists, return that patient.
+        if patient["id"] == mrn:
+            return patient
+    return False
+    # If not, return False
 
 
 def output_db(db):
     for patient in db:
         print("Patient id: {}".format(patient["id"]))
-        print("   Test Type: {}".format(patient["test_name"]))
-        print("   Test Value: {}".format(patient["test_value"]))
+        # print("Debug: {}".format(patient["tests"]))
+        for test_info in patient["tests"]:
+            print("   Test Type: {}".format(test_info[0]))
+            print("   Test Value: {}".format(test_info[1]))
+        
+        
+def add_test_to_patient(patient, test_name, test_value):
+    test_data = (test_name, test_value)
+    patient["tests"].append(test_data)
 
 
 def load_data():
     in_file = open("blood_test_data.txt", "r")
     db = []
     for line in in_file:
-        new_patient = line.strip("\n")
-        new_patient_dict = make_new_patient(new_patient)
-        db.append(new_patient_dict)
+        mrn, test_name, test_value = line.strip("\n").split(",")
+        mrn = int(mrn)
+        test_value = float(test_value)
+        existing_patient = get_patient_from_db(db, mrn)
+        if existing_patient is False:
+            new_patient_dict = make_new_patient(mrn, test_name, test_value)
+            db.append(new_patient_dict)
+        else:
+            add_test_to_patient(existing_patient, test_name, test_value)
     in_file.close()
     return db
     # with open("blood_test_data.txt", "r") as in_file:
