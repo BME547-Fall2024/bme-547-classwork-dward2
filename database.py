@@ -13,6 +13,8 @@ etc.
 
 """
 
+db = []
+
 
 def make_new_patient(mrn, test_name, test_value):
     test_data = (test_name, test_value)
@@ -21,7 +23,7 @@ def make_new_patient(mrn, test_name, test_value):
     return new_patient_dictionary
     
     
-def get_patient_from_db(db, mrn):
+def get_patient_from_db(mrn):
     # Search the database.
     for patient in db:
     # If the patient exists, return that patient.
@@ -31,7 +33,7 @@ def get_patient_from_db(db, mrn):
     # If not, return False
 
 
-def output_db(db):
+def output_db():
     for patient in db:
         print("Patient id: {}".format(patient["id"]))
         # print("Debug: {}".format(patient["tests"]))
@@ -47,19 +49,18 @@ def add_test_to_patient(patient, test_name, test_value):
 
 def load_data():
     in_file = open("blood_test_data.txt", "r")
-    db = []
     for line in in_file:
         mrn, test_name, test_value = line.strip("\n").split(",")
         mrn = int(mrn)
         test_value = float(test_value)
-        existing_patient = get_patient_from_db(db, mrn)
+        existing_patient = get_patient_from_db(mrn)
         if existing_patient is False:
             new_patient_dict = make_new_patient(mrn, test_name, test_value)
             db.append(new_patient_dict)
         else:
             add_test_to_patient(existing_patient, test_name, test_value)
     in_file.close()
-    return db
+    
     # with open("blood_test_data.txt", "r") as in_file:
     #     for line in in_file:
     #         new_patient = line.strip("\n")
@@ -67,8 +68,8 @@ def load_data():
 
 
 def main():
-    db = load_data()
-    output_db(db)
+    load_data()
+    output_db()
 
 
 if __name__ == "__main__":
