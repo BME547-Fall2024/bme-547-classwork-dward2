@@ -26,3 +26,37 @@ def test_get_patient_from_db():
     expected.add_test("LDL", 66)
     db.clear()
     assert answer == expected
+
+def test_Patient_add_test():
+    from database_class import Patient
+    # Arrange
+    patient = Patient(100, "David Ward")
+    patient.tests = [("HDL", 5)]
+    new_test = "LDL"
+    new_data = 10
+    # Act
+    patient.add_test(new_test, new_data)
+    # Assert
+    assert patient.tests[-1] == (new_test, new_data)
+    
+    
+def test_Patient_init():
+    from database_class import Patient
+    # Arrange
+    mrn = 10
+    name = "David Ward"
+    # Act
+    patient = Patient(mrn, name)
+    # Assert
+    assert patient.mrn == mrn
+    assert patient.name == name
+    
+def test_Patient_init_no_name():
+    from database_class import Patient
+    # Arrange
+    mrn = 10
+    # Act
+    patient = Patient(mrn)
+    # Assert
+    assert patient.mrn == mrn
+    assert patient.name == "John Doe"
