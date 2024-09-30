@@ -6,8 +6,8 @@ def test_make_new_patient():
     answer = make_new_patient(mrn, test_name, test_value)
     expected = {"id": mrn, "tests": [(test_name, test_value)]}
     assert answer == expected
-    
-    
+
+
 def test_get_patient_from_db():
     from database import get_patient_from_db, db, \
             make_new_patient
@@ -27,5 +27,3 @@ def test_get_patient_from_db():
 def test_empty_db():
     from database import db
     assert len(db) == 0
-    
- 

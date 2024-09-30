@@ -1,12 +1,3 @@
-def function_name():
-    # Have this function generate an error
-    # TypeError   x = 2 + "b"
-    # ValueError  float("hello")
-    # IndexError    x = [1, 2, 3];  print(x[10])
-    # ZeroDivisionError  x = 3 / 0
-    # NameError   x = {}  
-    pas
-    
 def calc_square_root(n):
 
     try:
@@ -18,7 +9,6 @@ def calc_square_root(n):
     return answer
 
 
-    
 def main():
     input_value = -4
     try:
@@ -28,12 +18,8 @@ def main():
         x = calc_square_root(int(input_value))
     except ValueError:
         x = calc_square_root(-input_value)
- 
-    
-        
-        
     print(x)
-    
-    
+
+
 if __name__ == "__main__":
     main()
