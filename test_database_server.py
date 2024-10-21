@@ -1,4 +1,7 @@
 import pytest
+from database_server import app
+
+client = app.test_client()
 
 # Should include the tests from the `test_Patient.py` file.
 
@@ -54,3 +57,41 @@ def test_get_patient_from_db(mrn, expected):
         assert answer == expected
     else:
         assert answer.name == expected
+
+
+def test_post_new_patient():
+    from database_server import db
+    db.clear()
+    in_json = {"id": 1, "name": "David", "blood_type": "O+"}
+    response = client.post("/new_patient", json=in_json)
+    assert response.status_code == 200
+    assert response.text == "Successfully added"
+    assert len(db) == 1
+    assert db[0].name == "David"
+
+
+def test_post_new_patient_error():
+    from database_server import db
+    db.clear()
+    in_json = {"ixd": 1, "name": "David", "blood_type": "O+"}
+    response = client.post("/new_patient", json=in_json)
+    assert response.status_code == 400
+    assert len(db) == 0
+
+
+@pytest.mark.parametrize("mrn, expected", [
+    (1, "One"),
+    (2, "Two"),
+    (3, False)
+])
+def test_get_get_results_patient_id(mrn, expected):
+    from database_server import get_patient_from_db, db, Patient
+    db.clear()
+    db.append(Patient(1, "One", "O+"))
+    db.append(Patient(2, "Two", "A-"))
+    answer = client.get("/get_results/{}".format(mrn))
+    if expected is False:
+        assert answer.status_code == 400
+    else:
+        assert answer.status_code == 200
+        assert answer.get_json() == []

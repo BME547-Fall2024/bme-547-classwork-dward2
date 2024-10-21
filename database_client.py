@@ -1,6 +1,7 @@
 import requests
 
 server = "http://127.0.0.1:5000"
+# server = "http://vcm-43729.vm.duke.edu:5000"
 
 out_json = {"id": 101,
             "name": "Ann Ables",
@@ -24,4 +25,3 @@ print(r.text)
 r = requests.get(server + "/get_results/101")
 print(r.status_code)
 print(r.text)
-

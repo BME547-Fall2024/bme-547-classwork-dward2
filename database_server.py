@@ -1,3 +1,5 @@
+import logging
+
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
@@ -168,5 +170,20 @@ def post_add_test():
     return "Successfully added test", 200
 
 
+def populate_database():
+    x = Patient(1, "one", "O+")
+    db.append(x)
+    y = Patient(2, "two", "O-")
+    db.append(y)
+
+
+def initialize_server():
+    logging.basicConfig(filename="server.log", filemode='w',
+                        level=logging.DEBUG)
+    logging.info("Started server")
+
+
 if __name__ == "__main__":
+    # populate_database()
+    initialize_server()
     app.run()
