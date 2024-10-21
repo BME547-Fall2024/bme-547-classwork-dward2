@@ -36,6 +36,30 @@ db = []
 
 @app.route("/new_patient", methods=["POST"])
 def post_new_patient():
+    """Adds new patient to database server
+
+    This function implements the "/new_patient" route of the server.  It
+    receives a POST request with the following JSON dictionary:
+
+    {"name": str, "id": int, "blood_type": str}
+
+    The "name" key should contain a string value with the name of the patient.
+    The "id" key should contain an integer value with the medical record
+    number of the patient.  The "blood_type" key should contain a string with
+    the patient's blood type.
+
+    The function then calls a function to validate that the input JSON has the
+    correct keys and data types.  If there is a validation problem, an
+    error message is returned as a response.  Next, the provided blood type is
+    checked to ensure it is a valid entry.  If not, an error message is sent
+    as a response.  When all the data checks out, a new patient is added to
+    the database and a success message is returned as a response
+
+    Returns
+        str: Message about success or failure of request
+        int: Status code
+
+    """
     # Get the data sent with the request
     in_data = request.get_json()
     # Validate the data received
@@ -81,6 +105,28 @@ def validate_blood_type(blood_type):
 
 @app.route("/get_results/<patient_id>", methods=["GET"])
 def get_get_results_patient_id(patient_id):
+    """Returns patient test results from the database based on provided
+    patient_id
+
+    This function implements a GET request with the variable URL
+    "get_results/<patient_id>" where the <patient_id> variable in the URL
+    should contain the medical record number for a patient in the database.
+    This function first validates that the provided mrn is in fact an
+    integer.  Next, it attempts to get the patient from the database with
+    that mrn.  If the mrn is not an integer, or if the given mrn does not
+    exist in the database, an error message is returned as a response.
+    Otherwise, the test results list of the found patient is returned as a
+    JSON string.
+
+    Args:
+        patient_id (str): portion of variable URL containing the medical record
+            number of the patient to be found
+
+    Returns:
+        str: Either an error message or a JSON list of test results
+        int: Status code
+
+    """
     mrn = validate_patient_id_string(patient_id)
     if type(mrn) is not int:
         return mrn, 400
