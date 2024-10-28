@@ -13,15 +13,15 @@ print(r.status_code)
 print(r.text)
 
 
-out_json = {"id": 101,
-            "test_name": "HDL",
-            "test_result": 60}
-
-r = requests.post(server + "/add_test",
-                  json=out_json)
-print(r.status_code)
-print(r.text)
-
-r = requests.get(server + "/get_results/101")
-print(r.status_code)
-print(r.text)
+# out_json = {"id": 101,
+#             "test_name": "HDL",
+#             "test_result": 60}
+#
+# r = requests.post(server + "/add_test",
+#                   json=out_json)
+# print(r.status_code)
+# print(r.text)
+#
+# r = requests.get(server + "/get_results/101")
+# print(r.status_code)
+# print(r.text)

@@ -1,37 +1,10 @@
 import logging
-
+from pymodm import connect
 from flask import Flask, request, jsonify
+from database_classes import Patient
+
 
 app = Flask(__name__)
-
-
-class Patient:
-
-    def __init__(self, mrn, name, blood_type):
-        self.mrn = mrn
-        self.tests = []
-        self.name = name
-        self.blood_type = blood_type
-
-    def __repr__(self):
-        return "Patient: {}, {}".format(self.name,
-                                        self.blood_type)
-
-    def __eq__(self, other):
-        if self.mrn == other.mrn and self.name == other.name:
-            return True
-        else:
-            return False
-
-    def print_data(self):
-        print(self.mrn)
-        print(self.name)
-        print(self.tests)
-
-    def add_test(self, test_name, test_value):
-        test_data = (test_name, test_value)
-        self.tests.append(test_data)
-
 
 db = []
 
@@ -92,10 +65,10 @@ def validate_input_data(in_data, expected_keys, expected_types):
 
 
 def add_patient_to_database(in_data):
-    new_patient = Patient(in_data["id"], in_data["name"],
-                          in_data["blood_type"])
-    db.append(new_patient)
-    print(db)
+    new_patient = Patient(mrn=in_data["id"],
+                          name=in_data["name"],
+                          blood_type=in_data["blood_type"])
+    new_patient.save()
 
 
 def validate_blood_type(blood_type):
@@ -181,7 +154,8 @@ def initialize_server():
     logging.basicConfig(filename="server.log", filemode='w',
                         level=logging.DEBUG)
     logging.info("Started server")
-
+    connect("mongodb+srv://fall24:fall24@bme547.ba348.mongodb.net/"
+            "server_database?retryWrites=true&w=majority&appName=BME547")
 
 if __name__ == "__main__":
     # populate_database()
