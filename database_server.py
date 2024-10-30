@@ -2,6 +2,7 @@ import logging
 from pymodm import connect
 from flask import Flask, request, jsonify
 from database_classes import Patient
+from pymodm import errors as pymodm_errors
 
 
 app = Flask(__name__)
@@ -69,6 +70,7 @@ def add_patient_to_database(in_data):
                           name=in_data["name"],
                           blood_type=in_data["blood_type"])
     new_patient.save()
+    return new_patient
 
 
 def validate_blood_type(blood_type):
@@ -121,10 +123,17 @@ def validate_patient_id_string(patient_id):
 
 
 def get_patient_from_db(mrn):
-    for patient in db:
-        if patient.mrn == mrn:
-            return patient
-    return False
+    try:
+        patient = Patient.objects.raw({"_id": mrn}).first()
+    except pymodm_errors.DoesNotExist:
+        return False
+    return patient
+
+
+def add_test(patient, test_name, test_result):
+    item = (test_name, test_result)
+    patient.tests.append(item)
+    patient.save()
 
 
 @app.route("/add_test", methods=["POST"])
@@ -139,7 +148,7 @@ def post_add_test():
     if patient is False:
         return ("Patient id of {} not found in database".format(in_data["id"]),
                 400)
-    patient.add_test(in_data["test_name"], in_data["test_result"])
+    add_test(patient, in_data["test_name"], in_data["test_result"])
     return "Successfully added test", 200
 
 
