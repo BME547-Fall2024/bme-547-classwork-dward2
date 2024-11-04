@@ -7,8 +7,6 @@ from pymodm import errors as pymodm_errors
 
 app = Flask(__name__)
 
-db = []
-
 
 @app.route("/new_patient", methods=["POST"])
 def post_new_patient():
@@ -153,10 +151,22 @@ def post_add_test():
 
 
 def populate_database():
-    x = Patient(1, "one", "O+")
-    db.append(x)
-    y = Patient(2, "two", "O-")
-    db.append(y)
+    """Pre-populate database for use during development
+
+    When multiple programmers are working on a project, it may be that one
+    developer needs to use data from a database before the developer who is in
+    charge of adding data to the database is finished with their work.  So, in
+    order to work in parallel, it is sometimes desired to pre-populate a
+    database so that users who need data from the database are not waiting for
+    the user who is populating the database.  This function achieves that.
+
+    This function, as written, takes advantage of the "add_patient_to_database"
+    function.  But, if that function did not yet exist at the start of the
+    project, this function would need to directly contact MongoDB itself to
+    create the needed entries.
+    """
+    add_patient_to_database({"name": "one", "id": 1, "blood_type": "O+"})
+    add_patient_to_database({"name": "two", "id": 2, "blood_type": "O-"})
 
 
 def initialize_server():
