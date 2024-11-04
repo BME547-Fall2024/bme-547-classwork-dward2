@@ -12,15 +12,16 @@ def main_window():
     # root.geometry("800x800")
 
     title_label = ttk.Label(root, text="Blood Donor Database", font=FONT)
-    title_label.grid(column=0, row=0, columnspan=2, sticky=tk.W, padx=PADDING, pady=PADDING)
+    title_label.grid(column=0, row=0, columnspan=2, sticky=tk.W,
+                     padx=PADDING, pady=PADDING)
 
     name_label = ttk.Label(root, text="Name:", font=FONT)
     name_label.grid(column=0, row=1, sticky=tk.E, padx=PADDING, pady=PADDING)
     name_entry = ttk.Entry(root, font=FONT)
     name_entry.grid(column=1, row=1, padx=PADDING, pady=PADDING)
-    
+
     id_label = ttk.Label(root, text="Id:", font=FONT)
-    id_label.grid(column=0, row=2, sticky = tk.E, padx=PADDING, pady=PADDING)
+    id_label.grid(column=0, row=2, sticky=tk.E, padx=PADDING, pady=PADDING)
     id_entry = ttk.Entry(root, font=FONT)
     id_entry.grid(column=1, row=2, padx=PADDING, pady=PADDING)
 
@@ -52,4 +53,3 @@ def main_window():
 
 if __name__ == "__main__":
     main_window()
-
