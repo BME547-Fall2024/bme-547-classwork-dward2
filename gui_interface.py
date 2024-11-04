@@ -7,6 +7,9 @@ PADDING = 5
 
 def main_window():
 
+    def cancel_btn_cmd():
+        root.destroy()
+
     root = tk.Tk()
     root.title("Blood Database")
     # root.geometry("800x800")
@@ -44,7 +47,7 @@ def main_window():
 
     ok_btn = ttk.Button(root, text="Ok")
     ok_btn.grid(column=1, row=6, padx=PADDING, pady=PADDING)
-    cancel_btn = ttk.Button(root, text="Cancel")
+    cancel_btn = ttk.Button(root, text="Cancel", command=cancel_btn_cmd)
     cancel_btn.grid(column=2, row=6, padx=PADDING, pady=PADDING)
 
     root.mainloop()
