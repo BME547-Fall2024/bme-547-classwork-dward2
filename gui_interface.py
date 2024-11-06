@@ -29,10 +29,12 @@ def main_window():
         try:
             mrn = int(id_no)
         except ValueError:
-            choice = messagebox.askyesno("Confirmation", "Are you sure you want to do this?")
+            choice = messagebox.askyesno("Confirmation",
+                                         "Are you sure you want to do this?")
             if choice:
                 print("I'll do it")
-            messagebox.showerror("Bad Validation", "The id was not an integer.")
+            messagebox.showerror("Bad Validation",
+                                 "The id was not an integer.")
             return
         blood_type_val = blood_type.get()
         rh_factor = rh_value.get()
@@ -47,7 +49,6 @@ def main_window():
         print("Blood type: {}{}".format(blood_type_val, rh_factor))
         print("County: {}".format(county_choice))
 
-
     root = tk.Tk()
     root.title("Blood Database")
     # root.geometry("800x800")
@@ -59,7 +60,7 @@ def main_window():
     name_label = ttk.Label(root, text="Name:", font=FONT)
     name_label.grid(column=0, row=1, sticky=tk.E, padx=PADDING, pady=PADDING)
     name_result = tk.StringVar()
-    name_entry = ttk.Entry(root, font=FONT, textvariable = name_result)
+    name_entry = ttk.Entry(root, font=FONT, textvariable=name_result)
     name_entry.grid(column=1, row=1, padx=PADDING, pady=PADDING)
 
     id_label = ttk.Label(root, text="Id:", font=FONT)
