@@ -1,9 +1,20 @@
 import tkinter as tk
 from itertools import count
-from tkinter import ttk
+from tkinter import ttk, messagebox
+import requests
+
+SERVER = "http://127.0.0.1:5000"
 
 FONT = None  # ("arial", 24)
 PADDING = 5
+
+
+def post_patient_to_server(name, mrn, blood_type):
+    out_json = {"name": name,
+                "id": mrn,
+                "blood_type": blood_type}
+    r = requests.post(SERVER + "/new_patient", json=out_json)
+    return r.text
 
 
 def main_window():
@@ -12,11 +23,25 @@ def main_window():
         root.destroy()
 
     def ok_btn_cmd():
+        # Get data from the GUI
         name_val = name_result.get()
         id_no = id_result.get()
+        try:
+            mrn = int(id_no)
+        except ValueError:
+            choice = messagebox.askyesno("Confirmation", "Are you sure you want to do this?")
+            if choice:
+                print("I'll do it")
+            messagebox.showerror("Bad Validation", "The id was not an integer.")
+            return
         blood_type_val = blood_type.get()
         rh_factor = rh_value.get()
         county_choice = county.get()
+        # Call other functions to do the work
+        full_blood_type = "{}{}".format(blood_type_val, rh_factor)
+        result = post_patient_to_server(name_val, mrn, full_blood_type)
+        # Update GUI as needed
+        status_label.configure(text=result)
         print("Name: {}".format(name_val))
         print("ID: {}".format(id_no))
         print("Blood type: {}{}".format(blood_type_val, rh_factor))
@@ -70,6 +95,9 @@ def main_window():
     ok_btn.grid(column=1, row=6, padx=PADDING, pady=PADDING)
     cancel_btn = ttk.Button(root, text="Cancel", command=cancel_btn_cmd)
     cancel_btn.grid(column=2, row=6, padx=PADDING, pady=PADDING)
+
+    status_label = ttk.Label(root, text="")
+    status_label.grid(column=0, row=7, padx=PADDING, pady=PADDING)
 
     root.mainloop()
     print("Finished")
