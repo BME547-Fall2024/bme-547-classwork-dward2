@@ -75,6 +75,14 @@ def main_window():
         image_label.configure(image=tk_image)
         image_label.image = tk_image
 
+    def change_label_color():
+        if center_label.cget("foreground") == "black":
+            center_label.configure(foreground="red")
+        else:
+            center_label.configure(foreground="black")
+        root.after(2000, change_label_color)
+    
+
     root = tk.Tk()
     root.title("Blood Database")
     # root.geometry("800x800")
@@ -111,7 +119,7 @@ def main_window():
                              onvalue="+", offvalue="-")
     rh_box.grid(column=1, row=4, padx=PADDING, pady=PADDING)
 
-    center_label = ttk.Label(root, text="Nearest Donation Center")
+    center_label = tk.Label(root, text="Nearest Donation Center", foreground="black")
     center_label.grid(column=2, row=0, padx=PADDING, pady=PADDING)
     county = tk.StringVar()
     dropdown_box = ttk.Combobox(root, values=("Durham", "Orange", "Wake"),
@@ -135,6 +143,8 @@ def main_window():
 
     status_label = ttk.Label(root, text="")
     status_label.grid(column=0, row=7, padx=PADDING, pady=PADDING)
+
+    root.after(2000, change_label_color)
 
     root.mainloop()
     print("Finished")
