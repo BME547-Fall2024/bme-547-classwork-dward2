@@ -22,7 +22,12 @@ def load_image(image_fn):
     pil_image = Image.open(image_fn)
     x, y = pil_image.size
     picture_size = 200
-    pil_image = pil_image.resize((picture_size, picture_size))
+    alpha_x = picture_size / x
+    alpha_y = picture_size / y
+    alpha = min(alpha_x, alpha_y)
+    new_x = round(x * alpha)
+    new_y = round(y * alpha)
+    pil_image = pil_image.resize((new_x, new_y))
     return pil_image
 
 
@@ -122,7 +127,6 @@ def main_window():
     image_label = ttk.Label(root, image=tk_image)
     image_label.grid(column=3, row=1, padx=PADDING, pady=PADDING,
                      rowspan=10)
-
 
     ok_btn = ttk.Button(root, text="Ok", command=ok_btn_cmd)
     ok_btn.grid(column=1, row=6, padx=PADDING, pady=PADDING)
