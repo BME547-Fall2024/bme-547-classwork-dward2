@@ -1,7 +1,8 @@
 import tkinter as tk
 from itertools import count
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
 import requests
+from PIL import Image, ImageTk
 
 SERVER = "http://127.0.0.1:5000"
 
@@ -15,6 +16,19 @@ def post_patient_to_server(name, mrn, blood_type):
                 "blood_type": blood_type}
     r = requests.post(SERVER + "/new_patient", json=out_json)
     return r.text
+
+
+def load_image(image_fn):
+    pil_image = Image.open(image_fn)
+    x, y = pil_image.size
+    picture_size = 200
+    alpha_x = picture_size / x
+    alpha_y = picture_size / y
+    alpha = min(alpha_x, alpha_y)
+    new_x = round(x * alpha)
+    new_y = round(y * alpha)
+    pil_image = pil_image.resize((new_x, new_y))
+    return pil_image
 
 
 def main_window():
@@ -48,6 +62,18 @@ def main_window():
         print("ID: {}".format(id_no))
         print("Blood type: {}{}".format(blood_type_val, rh_factor))
         print("County: {}".format(county_choice))
+
+    def image_select_btn_cmd():
+        # Get info from GUI
+        image_fn = filedialog.askopenfilename()
+        if image_fn == "":
+            return
+        # Call other function to do the work
+        pil_image = load_image(image_fn)
+        # Update the GUI
+        tk_image = ImageTk.PhotoImage(pil_image)
+        image_label.configure(image=tk_image)
+        image_label.image = tk_image
 
     root = tk.Tk()
     root.title("Blood Database")
@@ -91,6 +117,16 @@ def main_window():
     dropdown_box = ttk.Combobox(root, values=("Durham", "Orange", "Wake"),
                                 textvariable=county, state=["readonly"])
     dropdown_box.grid(column=2, row=1, padx=PADDING, pady=PADDING)
+
+    image_select_btn = ttk.Button(root, text="Select Image",
+                                  command=image_select_btn_cmd)
+    image_select_btn.grid(column=3, row=0)
+
+    pil_image = load_image("blank_avatar.png")
+    tk_image = ImageTk.PhotoImage(pil_image)
+    image_label = ttk.Label(root, image=tk_image)
+    image_label.grid(column=3, row=1, padx=PADDING, pady=PADDING,
+                     rowspan=10)
 
     ok_btn = ttk.Button(root, text="Ok", command=ok_btn_cmd)
     ok_btn.grid(column=1, row=6, padx=PADDING, pady=PADDING)
