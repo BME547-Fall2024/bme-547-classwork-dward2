@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Blood Donor Web Interface</title>
+    </head>
+
+    <body>
+        <h1>Blood Donor Database</h1>
+        <form method="post">
+            <label for="patient_name_id">Patient Name:</label>
+            <input type="text" id="patient_name_id" name="patient_name">
+            <br>
+            <label for="mrn_id">Patient MRN:</label>
+            <input type="text" id="mrn_id" name="mrn" required>
+            <br><br>
+            <input type="radio" id="radio_A", name="letter_choice", value="A">
+            <label for="radio_A">A</label>
+            <br>
+            <input type="radio" id="radio_B", name="letter_choice", value="B">
+            <label for="radio_B">B</label>
+            <br>
+            <input type="radio" id="radio_AB", name="letter_choice", value="AB">
+            <label for="radio_AB">AB</label>
+            <br>
+            <input type="radio" id="radio_O", name="letter_choice", value="O" checked>
+            <label for="radio_O">O</label>
+            <br>
+            <input type="checkbox" id="rh_factor", name="rh_factor", value="+">
+            <label for="rh_factor">Rh Factor</label>
+            <br><br>
+            <label for="center_choice">Donation Center</label>
+            <br>
+            <select id="center_choice" name="center_choice">
+                <option value="Durham">Durham</option>
+                <option value="Cary">Cary</option>
+                <option value="Raleigh">Raleigh</option>
+            </select>
+            <br><br>
+            <input type="submit" value="Ok">
+            
+
+        </form>
+    </body>
+</html>
