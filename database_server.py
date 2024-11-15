@@ -1,39 +1,11 @@
 import logging
-
+from pymodm import connect
 from flask import Flask, request, jsonify
+from database_classes import Patient
+from pymodm import errors as pymodm_errors
+
 
 app = Flask(__name__)
-
-
-class Patient:
-
-    def __init__(self, mrn, name, blood_type):
-        self.mrn = mrn
-        self.tests = []
-        self.name = name
-        self.blood_type = blood_type
-
-    def __repr__(self):
-        return "Patient: {}, {}".format(self.name,
-                                        self.blood_type)
-
-    def __eq__(self, other):
-        if self.mrn == other.mrn and self.name == other.name:
-            return True
-        else:
-            return False
-
-    def print_data(self):
-        print(self.mrn)
-        print(self.name)
-        print(self.tests)
-
-    def add_test(self, test_name, test_value):
-        test_data = (test_name, test_value)
-        self.tests.append(test_data)
-
-
-db = []
 
 
 @app.route("/new_patient", methods=["POST"])
@@ -92,10 +64,11 @@ def validate_input_data(in_data, expected_keys, expected_types):
 
 
 def add_patient_to_database(in_data):
-    new_patient = Patient(in_data["id"], in_data["name"],
-                          in_data["blood_type"])
-    db.append(new_patient)
-    print(db)
+    new_patient = Patient(mrn=in_data["id"],
+                          name=in_data["name"],
+                          blood_type=in_data["blood_type"])
+    new_patient.save()
+    return new_patient
 
 
 def validate_blood_type(blood_type):
@@ -148,10 +121,17 @@ def validate_patient_id_string(patient_id):
 
 
 def get_patient_from_db(mrn):
-    for patient in db:
-        if patient.mrn == mrn:
-            return patient
-    return False
+    try:
+        patient = Patient.objects.raw({"_id": mrn}).first()
+    except pymodm_errors.DoesNotExist:
+        return False
+    return patient
+
+
+def add_test(patient, test_name, test_result):
+    item = (test_name, test_result)
+    patient.tests.append(item)
+    patient.save()
 
 
 @app.route("/add_test", methods=["POST"])
@@ -166,22 +146,35 @@ def post_add_test():
     if patient is False:
         return ("Patient id of {} not found in database".format(in_data["id"]),
                 400)
-    patient.add_test(in_data["test_name"], in_data["test_result"])
+    add_test(patient, in_data["test_name"], in_data["test_result"])
     return "Successfully added test", 200
 
 
 def populate_database():
-    x = Patient(1, "one", "O+")
-    db.append(x)
-    y = Patient(2, "two", "O-")
-    db.append(y)
+    """Pre-populate database for use during development
+
+    When multiple programmers are working on a project, it may be that one
+    developer needs to use data from a database before the developer who is in
+    charge of adding data to the database is finished with their work.  So, in
+    order to work in parallel, it is sometimes desired to pre-populate a
+    database so that users who need data from the database are not waiting for
+    the user who is populating the database.  This function achieves that.
+
+    This function, as written, takes advantage of the "add_patient_to_database"
+    function.  But, if that function did not yet exist at the start of the
+    project, this function would need to directly contact MongoDB itself to
+    create the needed entries.
+    """
+    add_patient_to_database({"name": "one", "id": 1, "blood_type": "O+"})
+    add_patient_to_database({"name": "two", "id": 2, "blood_type": "O-"})
 
 
 def initialize_server():
     logging.basicConfig(filename="server.log", filemode='w',
                         level=logging.DEBUG)
     logging.info("Started server")
-
+    connect("mongodb+srv://fall24:fall24@bme547.ba348.mongodb.net/"
+            "server_database?retryWrites=true&w=majority&appName=BME547")
 
 if __name__ == "__main__":
     # populate_database()

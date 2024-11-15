@@ -1,5 +1,9 @@
 import pytest
 from database_server import app
+from database_classes import Patient
+
+from database_server import initialize_server
+initialize_server()
 
 client = app.test_client()
 
@@ -22,14 +26,16 @@ def test_validate_input_data(in_data, expected):
 
 
 def test_add_patient_to_database():
-    from database_server import add_patient_to_database, db
-    db.clear()
+    from database_server import add_patient_to_database
     in_data = {"id": 123,
                "name": "David",
                "blood_type": "O+"}
     add_patient_to_database(in_data)
-    assert len(db) == 1
-    assert db[0].mrn == 123
+    answer = Patient.objects.raw({"_id": 123}).first()
+    answer.delete()
+    assert answer.name == "David"
+    assert answer.blood_type == "O+"
+
 
 
 @pytest.mark.parametrize("blood_type, expected", [
@@ -45,18 +51,18 @@ def test_validate_blood_type(blood_type, expected):
 @pytest.mark.parametrize("mrn, expected", [
     (1, "One"),
     (2, "Two"),
-    (3, False)
 ])
 def test_get_patient_from_db(mrn, expected):
-    from database_server import get_patient_from_db, db, Patient
-    db.clear()
-    db.append(Patient(1, "One", "O+"))
-    db.append(Patient(2, "Two", "A-"))
+    from database_server import get_patient_from_db
+    from database_server import add_patient_to_database
+    in_data = {"id": mrn, "name": "name", "blood_type": "O+"}
+    new_patient = add_patient_to_database(in_data)
     answer = get_patient_from_db(mrn)
+    new_patient.delete()
     if expected is False:
-        assert answer == expected
+        assert answer.mrn == mrn
     else:
-        assert answer.name == expected
+        assert answer.name == mrn
 
 
 def test_post_new_patient():

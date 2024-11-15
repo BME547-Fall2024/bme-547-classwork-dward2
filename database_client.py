@@ -7,10 +7,10 @@ out_json = {"id": 101,
             "name": "Ann Ables",
             "blood_type": "A+"}
 
-r = requests.post(server + "/new_patient",
-                  json=out_json)
-print(r.status_code)
-print(r.text)
+# r = requests.post(server + "/new_patient",
+#                   json=out_json)
+# print(r.status_code)
+# print(r.text)
 
 
 out_json = {"id": 101,
