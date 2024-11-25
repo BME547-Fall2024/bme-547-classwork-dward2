@@ -1,8 +1,12 @@
 from pymodm import connect, MongoModel, fields
 import time
 from database_definitions import Patient, Doctors
+import os
 
-connect("mongodb+srv://fall24:fall24@bme547.ba348.mongodb.net/intro_class?retryWrites=true&w=majority&appName=BME547")
+mongo_pswd = os.environ.get('MONGODB')
+print(mongo_pswd)
+
+connect("mongodb+srv://fall24:{}@bme547.ba348.mongodb.net/intro_class?retryWrites=true&w=majority&appName=BME547".format(mongo_pswd))
 
 
 
