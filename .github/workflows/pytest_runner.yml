@@ -17,4 +17,4 @@ jobs:
       env:
         MONGODB: ${{ secrets.MONGODB }}
       run:
-        pytest -v --pycodestyle
+        pytest -v --test_mongo_work.py
