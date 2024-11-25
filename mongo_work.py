@@ -12,7 +12,9 @@ connect("mongodb+srv://fall24:{}@bme547.ba348.mongodb.net/intro_class?retryWrite
 
 def add_user(id, name):
     u = Patient(id=id, name=name)
-    u.save()
+    result = u.save()
+    return result
+    
 
 if __name__ == "__main__":
     add_user(101, "Bob")
