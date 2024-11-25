@@ -14,5 +14,7 @@ jobs:
     - name: Install dependencies
       run:  pip install -r requirements.txt
     - name: Test with pytest
+      env:
+        MONGODB: ${{ secrets.MONGODB }}
       run:
-        pytest -v --pycodestyle
+        pytest -v test_mongo_work.py
